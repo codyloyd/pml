@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PML</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Missouri Perscribed Music List</h1>
+      <h3>Instrumental</h3>
+    </header>
+    <form>
+      <p>
+      <input type="text" id="searchbox" placeholder="Search (Title or Composer)">
+      </p>
+      <label for="select">Filter Instruments</label>
+    <select>
+      <option value="All">All</option>
+      <option value="Alto Clarinet">Alto Clarinet</option>
+      <option value="Alto Saxophone">Alto Saxophone</option>
+      <option value="B-Flat Clarinet">B-Flat Clarinet</option>
+      <option value="B-Flat Clarinet Quartet">B-Flat Clarinet Quartet</option>
+      <option value="Baritone Horn">Baritone Horn</option>
+      <option value="Baritone Horn Quartet">Baritone Horn Quartet</option>
+      <option value="Baritone Horn Trio">Baritone Horn Trio</option>
+      <option value="Baritone Saxophone">Baritone Saxophone</option>
+      <option value="Bass Clarinet">Bass Clarinet</option>
+      <option value="Bassoon">Bassoon</option>
+      <option value="Cello">Cello</option>
+      <option value="Cello Quartet">Cello Quartet</option>
+      <option value="Clarinet Trio">Clarinet Trio</option>
+      <option value="Contra Clarinet">Contra Clarinet</option>
+      <option value="E-Flat Clarinet">E-Flat Clarinet</option>
+      <option value="English Horn">English Horn</option>
+      <option value="Flute">Flute</option>
+      <option value="Flute Quartet">Flute Quartet</option>
+      <option value="Flute Trio">Flute Trio</option>
+      <option value="French Horn">French Horn</option>
+      <option value="French Horn Trio">French Horn Trio</option>
+      <option value="French Horn Quartet">French Horn Quartet</option>
+      <option value="Harp">Harp</option>
+      <option value="Keyboard Mallet">Keyboard Mallet</option>
+      <option value="Miscellaneous Brass Ensemble">Miscellaneous Brass Ensemble</option>
+      <option value="Miscellaneous Woodwind Ensemble">Miscellaneous Woodwind Ensemble</option>
+      <option value="Mixed Brass Quartet">Mixed Brass Quartet</option>
+      <option value="Mixed Brass Quintet">Mixed Brass Quintet</option>
+      <option value="Mixed Brass Sextet">Mixed Brass Sextet</option>
+      <option value="Mixed Clarinet Quartet">Mixed Clarinet Quartet</option>
+      <option value="Mixed Woodwind Quartet">Mixed Woodwind Quartet</option>
+      <option value="Mixed Woodwind Quintet">Mixed Woodwind Quintet</option>
+      <option value="Mixed Woodwind Trio">Mixed Woodwind Trio</option>
+      <option value="Multiple Percussion">Multiple Percussion</option>
+      <option value="Oboe">Oboe</option>
+      <option value="Percussion Ensemble">Percussion Ensemble</option>
+      <option value="Piano">Piano</option>
+      <option value="Piano Quartet">Piano Quartet</option>
+      <option value="Piano Trio">Piano Trio</option>
+      <option value="Piccolo">Piccolo</option>
+      <option value="Saxophone Quartet">Saxophone Quartet</option>
+      <option value="Saxophone Trio">Saxophone Trio</option>
+      <option value="Snare Drum">Snare Drum</option>
+      <option value="Soprano Saxophone">Soprano Saxophone</option>
+      <option value="String Bass">String Bass</option>
+      <option value="String Duet">String Duet</option>
+      <option value="String Quartet">String Quartet</option>
+      <option value="String Quintet">String Quintet</option>
+      <option value="String Sextet">String Sextet</option>
+      <option value="String Trio">String Trio</option>
+      <option value="Tenor Saxophone">Tenor Saxophone</option>
+      <option value="Timpani">Timpani</option>
+      <option value="Trombone">Trombone</option>
+      <option value="Trombone Quartet">Trombone Quartet</option>
+      <option value="Trombone Trio">Trombone Trio</option>
+      <option value="Trumpet">Trumpet</option>
+      <option value="Trumpet Trio">Trumpet Trio</option>
+      <option value="Tuba">Tuba</option>
+      <option value="Viola">Viola</option>
+      <option value="Violin">Violin</option>
+    </select>
+    </form>
+    <div class="results">
+      
+    </div>
+  </div>
+  <script
+  src="https://code.jquery.com/jquery-3.1.1.min.js"
+  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+  crossorigin="anonymous"></script>
+  <script>
+  const searchbox = document.querySelector('#searchbox')
+  const results = document.querySelector('.results')
+  const pml = []
+  $.getJSON('./data.json', data => {
+    pml.push(...data)
+  })
+
+  function findMatches(wordToMatch){
+    return pml.filter(entry =>{
+      const regexp = new RegExp(wordToMatch,"gi")
+      return entry.title.match(regexp) || entry.composer.match(regexp)
+    })
+  }
+
+  function displayMatches() {
+    const matchArray = findMatches(this.value)
+    const html = matchArray.map(item => {
+      return `
+      <div class="item">
+        <div class="top-row">
+          <div class="title-composer">
+            <h3>${item.title} - ${item.composer}</h3>
+          </div>
+          <div class="level">
+            <h1>${item.level}</h1>
+          </div>
+        </div>
+        <div class="middle-row">
+          <div class="event-type">
+            <h4>${item.eventType}</h4>
+          </div>
+          <div class="arranger-info">
+            <p>${item.arrangerEtc}</p>
+          </div>
+        </div>
+        <div class="bottom-row">
+          <div class="id">
+            <p>ID: ${item.id}</p>
+          </div>
+          <div class="voicing">
+            <p>${item.voicing}</p>
+          </div>
+        </div>
+        <div class="under3">
+          ${item.under3 == "Y" ? "" : "Under Three Minutes"}
+        </div>
+      </div>
+      `
+    }).join('')
+    results.innerHTML = html
+  }
+
+
+  searchbox.addEventListener('keyup',displayMatches)
+  searchbox.addEventListener('change',displayMatches)
+
+  </script>
+</body>
+</html>

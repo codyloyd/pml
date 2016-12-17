@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css?family=Slabo+27px');
+* {
+  font-family: 'Slabo 27px', serif;
+}
+html {
+  background: #F3F3F3;
+}
+.container {
+  max-width: 650px;
+  margin: 0 auto;
+}
+header {
+  width: 100%;
+  margin-top: 20px;
+}
+header h1,header h3{
+  text-align: center;
+  margin: 3px;
+}
+form {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+input[type="text"]{
+  width: 300px;
+}
+
+.item {
+  border: #ddd solid 1px;
+  background: #FAFAFA;
+  margin: 15px;
+  padding: 10px;
+  box-shadow: 2px 3px 10px 0px rgba(50, 50, 50, 0.15);
+}
+.item *{
+  margin: 1px;
+}
+
+.item div{
+  /*border: 1px solid red;*/
+}
+
+.top-row{
+  display: flex;
+}
+.title-composer{
+  flex:5;
+  display: flex;
+  align-items: center
+}
+.level {
+  flex:1;
+  text-align: center;
+}
+
+.middle-row{
+  display:flex;
+}
+.event-type {
+  flex:2;
+}
+.arranger-info{
+  flex:1;
+  text-align: right;
+}
+
+.bottom-row {
+  display: flex;
+}
+
+.id{
+  flex:1;
+}
+
+.voicing{
+  text-align: right;
+  flex:4;
+}
+.under3 {
+  text-align: center;
+  color: red;
+  font-size: 1.1em;
+}
