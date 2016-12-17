@@ -88,18 +88,32 @@
   src="https://code.jquery.com/jquery-3.1.1.min.js"
   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
   crossorigin="anonymous"></script>
+
   <script>
   const searchbox = document.querySelector('#searchbox')
   const results = document.querySelector('.results')
+  const form = document.querySelector('form')
+  const instrumentFilter = document.querySelector('select')
   const pml = []
   $.getJSON('./data.json', data => {
     pml.push(...data)
   })
 
+  function isFiltered(entry) {
+    if (instrumentFilter.value === "All") {
+      return true
+    } else if (instrumentFilter.value === entry.eventType) {
+      return true
+    } else {
+      return false
+    }
+  }
+
+
   function findMatches(wordToMatch){
     return pml.filter(entry =>{
       const regexp = new RegExp(wordToMatch,"gi")
-      return entry.title.match(regexp) || entry.composer.match(regexp)
+      return (entry.title.match(regexp) || entry.composer.match(regexp)) && isFiltered(entry)
     })
   }
 
@@ -141,9 +155,16 @@
     results.innerHTML = html
   }
 
+  function filterInstruments(){
+    return pml.filter(item => {
+      return item.eventType == instrumentFilter.value
+    })
+  }
 
-  searchbox.addEventListener('keyup',displayMatches)
-  searchbox.addEventListener('change',displayMatches)
+  instrumentFilter.addEventListener('change', displayMatches)
+  form.addEventListener('submit', e => e.preventDefault());
+  searchbox.addEventListener('keyup',displayMatches);
+  searchbox.addEventListener('change',displayMatches);
 
   </script>
 </body>
