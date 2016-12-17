@@ -118,7 +118,7 @@
   }
 
   function displayMatches() {
-    const matchArray = findMatches(this.value)
+    const matchArray = findMatches(searchbox.value)
     const html = matchArray.map(item => {
       return `
       <div class="item">
